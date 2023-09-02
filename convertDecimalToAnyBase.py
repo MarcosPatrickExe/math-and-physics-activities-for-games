@@ -24,7 +24,7 @@ print("resultado: ", recursive_DecimalToAnyBase(numberI, baseI, "") );
 
 
 
-
+# FORMA ALTERNATIVA (utilizando o For) PARA CONVERTER NUMERO DECIMAL PARA QUALQUER OUTRA BASE NUMERICA
 """
 while True:
     if(quotient < base ):
