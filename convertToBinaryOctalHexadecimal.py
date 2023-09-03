@@ -16,7 +16,7 @@ while True:
     acumulativeRests = str(rest) + acumulativeRests;
     number = quocient;
 
-print("binario: ",acumulativeRests);
+print("Binario: ",acumulativeRests);
 
 
 binaryStr = "";
@@ -33,34 +33,42 @@ elif len(acumulativeRests) % 3 ==0:
 
 
 maxGroupVectors = len( binaryStr ) // 3;
-
 groupList = {};
 
 
-# inicializando o Dict com vetores em cada chave/key:
+# inicializando cada chave/key do Dict com 0:
 for groupIndex in range(1, maxGroupVectors+1 ):
-     groupList[ "list"+str(groupIndex) ] = [];
+    groupList[ "list"+str(groupIndex) ] = 0;
 
 
-indexSubList = 1;
-indexSubListElements = 0;
+indexSubList = 1; # variavel necessaria para identificar os chaves/keys do Dict "groupList"
+indexSubListElements = 0; # os indexs do vetor de cada chave do Dict sempre irao de 0 a 2
+
+octalDivisor = 4; # somente pode ter valores {4, 2 e 1}
 
 
+            # percorrendo cada caractere do numero binario
 for bit in range( 0, len(binaryStr)):
 
-    groupList[ "list"+str(indexSubList) ].append( binaryStr[bit] );
+ # acessando cada chave/key criada no 'for' anterior e somando ao conteudo dessa chave o produto entre 'octalDivisor' e o valor do bit atual de 'binaryStr' 
+    groupList[ "list"+str(indexSubList) ] += (octalDivisor * int( binaryStr[bit]) );
 
     indexSubListElements += 1;
+    octalDivisor = octalDivisor // 2;
 
     if( indexSubListElements == 3 ):
+         octalDivisor = 4;
          indexSubListElements = 0;
          indexSubList += 1;
-    
 
-print("dict: ", groupList);
-# dict:  {
-#    'list1': ['0', '0', '1'], 
-#    'list2': ['1', '0', '0'], 
-#    'list3': ['1', '0', '0']
-# }
 
+resultInOctal = "";
+
+# acessando cada chave do Dict 'groupList'
+for groupIndex in range(1, maxGroupVectors+1 ):
+    # concatenando o numero contido em cada key na String 'resultOctal'
+    resultInOctal = resultInOctal + str( groupList[ "list"+str(groupIndex) ] );
+
+
+print("Octal: ", resultInOctal);
+#print("dict: ", groupList);
