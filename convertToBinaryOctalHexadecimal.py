@@ -58,5 +58,9 @@ for bit in range( 0, len(binaryStr)):
     
 
 print("dict: ", groupList);
-
+# dict:  {
+#    'list1': ['0', '0', '1'], 
+#    'list2': ['1', '0', '0'], 
+#    'list3': ['1', '0', '0']
+# }
 
