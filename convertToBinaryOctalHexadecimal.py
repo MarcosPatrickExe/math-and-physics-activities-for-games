@@ -3,7 +3,6 @@ import math;
 
 print("digite um numero decimal...");
 number = int( input() );
-
 acumulativeRests = "";
 
 while True:
@@ -22,7 +21,6 @@ print("binario: ",acumulativeRests);
 
 binaryStr = "";
 
-
 if len(acumulativeRests) % 3 == 1:
      binaryStr = "00"+acumulativeRests;
 
@@ -33,18 +31,32 @@ elif len(acumulativeRests) % 3 ==0:
      binaryStr = acumulativeRests;
 
 
+
 maxGroupVectors = len( binaryStr ) // 3;
-maxGroupVectors +=1;
-testDict = {};
 
-for n in range(1, maxGroupVectors):
-    print(n);
-    testDict[ "list"+str(n) ] = 0;
-
-    for i in range(2, -1, -1):
-        testDict[ "list"+str(n) ] = binaryStr[i]
+groupList = {};
 
 
-print("dict: ", testDict);
+# inicializando o Dict com vetores em cada chave/key:
+for groupIndex in range(1, maxGroupVectors+1 ):
+     groupList[ "list"+str(groupIndex) ] = [];
+
+
+indexSubList = 1;
+indexSubListElements = 0;
+
+
+for bit in range( 0, len(binaryStr)):
+
+    groupList[ "list"+str(indexSubList) ].append( binaryStr[bit] );
+
+    indexSubListElements += 1;
+
+    if( indexSubListElements == 3 ):
+         indexSubListElements = 0;
+         indexSubList += 1;
+    
+
+print("dict: ", groupList);
 
 
