@@ -1,24 +1,63 @@
 import math;
 
 
+def convertDecimalToBinary( numberDecimal ):
+    acumulativeRests2 = "";
+
+    while True:
+        if(numberDecimal < 2):
+            acumulativeRests2 = str(numberDecimal) + acumulativeRests2;
+            break;
+
+        quocient = math.floor( numberDecimal / 2 );
+        rest = numberDecimal % 2;
+
+        acumulativeRests2 = str(rest) + acumulativeRests2;
+        numberDecimal= quocient;
+    
+    return acumulativeRests2;
+
+
+def recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, exponent):
+   
+    if(currentIndex == -1 ):
+        return int(cumulativeResult);
+
+    cumulativeResult += int( number[currentIndex] ) * math.pow(base, exponent);
+    currentIndex -= 1;
+    exponent += 1;
+    return recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, exponent)
+
+
+
+def convertNumberToLetter(number):
+    match number:
+       case 10:
+           return 'A'
+       case 11:
+           return 'B'
+       case 12:
+           return 'C'
+       case 13:
+           return 'D'
+       case 14:
+           return 'E'
+       case 15:
+           return 'F'
+    return number;
+
+
+
+
 print("digite um numero decimal...");
 number = int( input() );
-acumulativeRests = "";
-
-while True:
-    if(number < 2):
-        acumulativeRests = str(number) + acumulativeRests;
-        break;
-
-    quocient = math.floor( number / 2 );
-    rest = number % 2;
-
-    acumulativeRests = str(rest) + acumulativeRests;
-    number = quocient;
+acumulativeRests = convertDecimalToBinary( number );
 
 print("Binario: ",acumulativeRests);
 
 
+
+#===================  CONVERTENDO DE BINARIO PARA OCTAL:  ======================
 binaryStr = "";
 
 if len(acumulativeRests) % 3 == 1:
@@ -29,7 +68,6 @@ elif len(acumulativeRests) % 3 == 2:
 
 elif len(acumulativeRests) % 3 ==0:
      binaryStr = acumulativeRests;
-
 
 
 maxGroupVectors = len( binaryStr ) // 3;
@@ -49,7 +87,6 @@ octalDivisor = 4; # somente pode ter valores {4, 2 e 1}
 
             # percorrendo cada caractere do numero binario
 for bit in range( 0, len(binaryStr)):
-
  # acessando cada chave/key criada no 'for' anterior e somando ao conteudo dessa chave o produto entre 'octalDivisor' e o valor do bit atual de 'binaryStr' 
     groupList[ "list"+str(indexSubList) ] += (octalDivisor * int( binaryStr[bit]) );
 
@@ -61,14 +98,79 @@ for bit in range( 0, len(binaryStr)):
          indexSubListElements = 0;
          indexSubList += 1;
 
-
 resultInOctal = "";
 
 # acessando cada chave do Dict 'groupList'
-for groupIndex in range(1, maxGroupVectors+1 ):
+for key in groupList:
     # concatenando o numero contido em cada key na String 'resultOctal'
-    resultInOctal = resultInOctal + str( groupList[ "list"+str(groupIndex) ] );
-
+    resultInOctal = resultInOctal + str( groupList[key] );
 
 print("Octal: ", resultInOctal);
-#print("dict: ", groupList);
+
+
+
+#====================  CONVERTENDO DE OCTAL PARA HEXADECIMAL:  ==============
+
+basicBinaryStr = "";
+
+#convertendo o valor contido em cada key para binario e 'juntando na String 'basicBinaryStr''
+for key in groupList:
+    basicBinaryStr = basicBinaryStr + str( convertDecimalToBinary( groupList[key]) );
+
+
+# adicionando zeros a frente para caso o tamanho total de 'basicBinaryStr' nao seja multiplo de 4
+match len( basicBinaryStr) % 4:
+    case 1: 
+        basicBinaryStr = "000"+str(basicBinaryStr);
+    case 2: 
+        basicBinaryStr = "00"+str(basicBinaryStr);
+    case 3: 
+        basicBinaryStr = "0"+str(basicBinaryStr);
+
+
+binarySubGroup = [];
+min = 0;
+max = 4;
+
+print("basicBinaryStr: ", basicBinaryStr);
+
+
+# esse 'for' ira rodar o mesmo numero de vezes que o numero de grupos de 4 bits dentro de 'basicBinaryStr'
+for num in range(0, len(basicBinaryStr) // 4 ):
+    binarySubGroup.append( basicBinaryStr[min:max]  );
+    min += 4;
+    max += 4;
+
+
+print("binarySubGroup: ", binarySubGroup);
+
+
+decimalSubGroup = [];
+
+for subGroup in range(0, len(binarySubGroup)):
+    exponent = 0;
+    cumulativeSum = 0;
+
+    #esse percorre um subGroup de trás pra frente, como um [1011]
+    for i in range(3, -1, -1):
+        cumulativeSum += int( binarySubGroup[subGroup][i]) * math.pow(2, exponent);
+        exponent += 1;
+    
+    decimalSubGroup.append( int(cumulativeSum) );
+
+
+print("decimalSubGroup:  ",decimalSubGroup);
+
+hexadecimalStr = "";
+
+for index in range(0, len(decimalSubGroup) ):
+    
+    # converte o decimal para alguma letra caso ele seja > 9
+    hexaDecimalValue = convertNumberToLetter( decimalSubGroup[index] );
+
+    # adicionando os resultados em cada subgrupo de 'decimalSubGroup' em uma so String
+    hexadecimalStr = hexadecimalStr + str(hexaDecimalValue); 
+
+print("Hexadecimal: ", hexadecimalStr);
+
+# Link baseado na conversao 
