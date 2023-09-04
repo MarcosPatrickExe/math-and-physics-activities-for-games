@@ -18,17 +18,6 @@ def convertDecimalToBinary( numberDecimal ):
     return acumulativeRests2;
 
 
-def recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, exponent):
-   
-    if(currentIndex == -1 ):
-        return int(cumulativeResult);
-
-    cumulativeResult += int( number[currentIndex] ) * math.pow(base, exponent);
-    currentIndex -= 1;
-    exponent += 1;
-    return recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, exponent)
-
-
 
 def convertNumberToLetter(number):
     match number:
@@ -53,7 +42,7 @@ print("digite um numero decimal...");
 number = int( input() );
 acumulativeRests = convertDecimalToBinary( number );
 
-print("Binario: ",acumulativeRests);
+print("\nBinario:    ",acumulativeRests);
 
 
 
@@ -105,7 +94,7 @@ for key in groupList:
     # concatenando o numero contido em cada key na String 'resultOctal'
     resultInOctal = resultInOctal + str( groupList[key] );
 
-print("Octal: ", resultInOctal);
+print("Octal:       ", resultInOctal);
 
 
 
@@ -115,7 +104,15 @@ basicBinaryStr = "";
 
 #convertendo o valor contido em cada key para binario e 'juntando na String 'basicBinaryStr''
 for key in groupList:
-    basicBinaryStr = basicBinaryStr + str( convertDecimalToBinary( groupList[key]) );
+    binaryN = convertDecimalToBinary( groupList[key]);
+     
+    #o novo numero binario deve ter um tamanho de 3 bits sempre, por isso:
+    if( len(binaryN) == 2):
+        basicBinaryStr = basicBinaryStr + "0"+binaryN;
+    elif( len(binaryN) == 1):
+        basicBinaryStr = basicBinaryStr + "00"+binaryN;
+    else:
+        basicBinaryStr = basicBinaryStr + binaryN;
 
 
 # adicionando zeros a frente para caso o tamanho total de 'basicBinaryStr' nao seja multiplo de 4
@@ -132,7 +129,7 @@ binarySubGroup = [];
 min = 0;
 max = 4;
 
-print("basicBinaryStr: ", basicBinaryStr);
+#print("basicBinaryStr: ", basicBinaryStr);
 
 
 # esse 'for' ira rodar o mesmo numero de vezes que o numero de grupos de 4 bits dentro de 'basicBinaryStr'
@@ -142,7 +139,7 @@ for num in range(0, len(basicBinaryStr) // 4 ):
     max += 4;
 
 
-print("binarySubGroup: ", binarySubGroup);
+#print("binarySubGroup: ", binarySubGroup);
 
 
 decimalSubGroup = [];
@@ -159,7 +156,7 @@ for subGroup in range(0, len(binarySubGroup)):
     decimalSubGroup.append( int(cumulativeSum) );
 
 
-print("decimalSubGroup:  ",decimalSubGroup);
+#print("decimalSubGroup:  ",decimalSubGroup);
 
 hexadecimalStr = "";
 
@@ -173,4 +170,13 @@ for index in range(0, len(decimalSubGroup) ):
 
 print("Hexadecimal: ", hexadecimalStr);
 
-# Link baseado na conversao 
+
+
+# Esse codigo se baseou nos seguintes vídeos:
+# 
+# Convert Binary To Octal:
+# https://www.youtube.com/watch?v=JxmarqiqUdM&t=136s
+
+# convert Octal to Hexadecimal:
+# https://www.youtube.com/watch?v=lEgPlyNeHBE
+# https://blog.betrybe.com/linguagem-de-programacao/sistema-hexadecimal/
