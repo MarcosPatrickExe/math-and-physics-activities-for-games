@@ -13,7 +13,7 @@ def recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, ex
         return cumulativeResult;
 
     cumulativeResult += int( number[currentIndex] ) * math.pow(base, exponent);
-    currentIndex -= 1;
+    currentIndex -= 1; # fazendo alguma alteracao na variavel antes de envia-la para a proxima recursao
     exponent += 1;
     return recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, exponent)
 
