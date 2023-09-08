@@ -12,6 +12,7 @@ def recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, ex
     if(currentIndex == -1 ):
         return cumulativeResult;
 
+    # "cumulativeResult" vai acumulando as a soma de todos os valores multiplicados pela base elevada pelo expoente crescente
     cumulativeResult += int( number[currentIndex] ) * math.pow(base, exponent);
     currentIndex -= 1; # fazendo alguma alteracao na variavel antes de envia-la para a proxima recursao
     exponent += 1;
