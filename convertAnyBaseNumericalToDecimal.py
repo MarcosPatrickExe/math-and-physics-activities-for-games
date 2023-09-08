@@ -23,9 +23,3 @@ def recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, ex
 result = recursive_AnyBaseToDecimal( len(numberI)-1, 0, numberI, baseI, 0);
 print("resultado:  ", int(result) )
 
-
-
-
-
-#for digit in range( len(numberI)-1, -1, -1 ):
- #   print( numberI[digit] );
