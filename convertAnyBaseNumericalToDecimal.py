@@ -8,7 +8,8 @@ numberI = input();
 
 
 def recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, exponent):
-   
+
+    #condição de parada da função recursiva
     if(currentIndex == -1 ):
         return cumulativeResult;
 
