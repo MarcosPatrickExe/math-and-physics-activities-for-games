@@ -1,6 +1,6 @@
 import math;
 
-
+# utilizando recursividade para ter diminuir o grau de complexidade do algoritmo 
 def recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, exponent):
    
     if(currentIndex == -1 ):
@@ -13,7 +13,7 @@ def recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, ex
 
 
 
-def recursive_DecimalToAnyBase(number, base, totalResult ):
+def recursive_DecimalToAnyBase( number, base, totalResult ):
     
     if(number < base):
         finalResult = str(number)+""+ totalResult;
