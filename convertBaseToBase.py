@@ -12,9 +12,10 @@ def recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, ex
     return recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, exponent)
 
 
-
+# utilizando recursividade para ter diminuir o grau de complexidade do algoritmo 
 def recursive_DecimalToAnyBase( number, base, totalResult ):
-    
+   
+    # caso o number (ou quociente) seja menor que o divisor (ou nesse caso, a base) entao o processo de divisoes sucessivas ira parar
     if(number < base):
         finalResult = str(number)+""+ totalResult;
         return finalResult;
