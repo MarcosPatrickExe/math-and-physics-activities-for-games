@@ -37,6 +37,7 @@ print("digite a base para a qual o numero sera convertido... ");
 base2 = int( input() );
 
 
+# aqui sera feito o uso das 2 funcoes anteriores
 if( base1 < 10 ):
     decimalResult = recursive_AnyBaseToDecimal( len(anyNumber)-1, 0, anyNumber, base1, 0);
 
