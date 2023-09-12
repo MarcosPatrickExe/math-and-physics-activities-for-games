@@ -6,7 +6,7 @@ numberI = int( input() );
 print("digite a base numérica para aplicar no numero anterior... ");
 baseI = int( input() );
 
-
+# usando funcao recursiva para melhorar o desempenho
 def recursive_DecimalToAnyBase(number, base, totalResult ):
     
     if(number < base):
