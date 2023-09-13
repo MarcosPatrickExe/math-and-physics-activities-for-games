@@ -1,6 +1,6 @@
 import math;
 
-
+# funcao com while para fazer divisoes sucessivas
 def convertDecimalToBinary( numberDecimal ):
     acumulativeRests2 = "";
 
