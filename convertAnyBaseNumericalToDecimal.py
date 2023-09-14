@@ -7,6 +7,7 @@ print("digite um numero que pertence a essa base numerica...");
 numberI = input();
 
 
+#usando recursividade para aumentar a velocidade de execucao para esse caso em especifico
 def recursive_AnyBaseToDecimal( currentIndex, cumulativeResult, number, base, exponent):
 
     #condição de parada da função recursiva
