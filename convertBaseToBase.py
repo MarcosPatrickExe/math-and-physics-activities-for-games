@@ -17,7 +17,7 @@ def recursive_DecimalToAnyBase( number, base, totalResult ):
    
     # caso o number (ou quociente) seja menor que o divisor (ou nesse caso, a base) entao o processo de divisoes sucessivas ira parar
     if(number < base):
-        finalResult = str(number)+""+ totalResult;
+        finalResult = str(number)+""+ totalResult; #concatenando os resultados
         return finalResult;
     
     quotient = math.floor( number/base );
