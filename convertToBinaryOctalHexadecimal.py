@@ -18,7 +18,7 @@ def convertDecimalToBinary( numberDecimal ):
     return acumulativeRests2;
 
 
-
+# convertendo numero de 10 ate 15 para  a sua correspondente letra 
 def convertNumberToLetter(number):
     match number:
        case 10:
