@@ -179,6 +179,33 @@ function calculateIntersection( line1, line2) {
 }
 
 
+function getReducedEquationLineAnCheckCollision( lineA, lineB ){
+    // obtendo o coeficiente angular "a" atraves do deltaY (Y2 - Y) / deltaX (X2 - X):
+  
+    let Y, x, b;
+    const a = (lineB.Y - lineA.Y) / (lineB.X - lineA.X);
+    
+    // Y = a * x + b
+    // b = Y - a * x
+    b = lineA.Y - (a * lineA.X);
+    
+    /* Com os valores de "a" e "b" obtidos, eh possivel verificar se a bolinha cruza a reta!
+       para isso, basta substituir o X da bolina na equacao reduzida da reta e verificar se o Y obtido eh igual ao        Y da bolinha...
+      se forem iguais, entao a bolinha cruzou a reta!  */
+    
+    Y = (a * dot.X) + b;
+   // console.log("dot Y: "+Math.floor(dot.Y)+"  ==  "+ Math.floor(Y) );
+   
+  
+    fill(255);
+    stroke(0);
+  
+    if( Math.floor(dot.Y) ==  Math.floor(Y) ){
+          texto("Bolinha cruzou a reta!  ", -(width/2) + 10, -(height/2-50 ) ); 
+          dot.directX *= -1;
+          dot.directY *= -1;
+    }
+}
 
 //===========================  FUNCOES PADROES JA IMPLEMENTADAS NO KIT BASICO  ========================================
 function goCartesian(){
@@ -248,42 +275,6 @@ function drawArrow(){
   for( ang=0; ang<2*PI; ang += PI/26)
       line(0,0, R*cos(ang), R*sin(ang))
 }
-
-  
-    
-    
-    
-function getReducedEquationLineAnCheckCollision( lineA, lineB ){
-    // obtendo o coeficiente angular "a" atraves do deltaY (Y2 - Y) / deltaX (X2 - X):
-  
-    let Y, x, b;
-    const a = (lineB.Y - lineA.Y) / (lineB.X - lineA.X);
-    
-    // Y = a * x + b
-    // b = Y - a * x
-    b = lineA.Y - (a * lineA.X);
-    
-    /* Com os valores de "a" e "b" obtidos, eh possivel verificar se a bolinha cruza a reta!
-       para isso, basta substituir o X da bolina na equacao reduzida da reta e verificar se o Y obtido eh igual ao        Y da bolinha...
-      se forem iguais, entao a bolinha cruzou a reta!  */
-    
-    Y = (a * dot.X) + b;
-   // console.log("dot Y: "+Math.floor(dot.Y)+"  ==  "+ Math.floor(Y) );
-   
-  
-    fill(255);
-    stroke(0);
-  
-    if( Math.floor(dot.Y) ==  Math.floor(Y) ){
-          texto("Bolinha cruzou a reta!  ", -(width/2) + 10, -(height/2-50 ) ); 
-          dot.directX *= -1;
-          dot.directY *= -1;
-    }
-}
-    
-    
-
-    
     
 //  MACETE PARA DESCOBRIR A EQUACAO GERAL DA RETA QUE PASSA POR 2 PONTOS SEM USAR O DETERMINANTE:
 // https://www.youtube.com/watch?v=9dhtGUPgekw&t=362s&ab_channel=EquacionaComPauloPereira
