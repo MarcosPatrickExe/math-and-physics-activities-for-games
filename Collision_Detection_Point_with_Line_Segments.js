@@ -69,38 +69,19 @@ function draw(){
   
     drawRetas()
 
- //   segRetaAmarela.drawSegmento();
-//    segRetaVermelha.drawSegmento();
+    for( let i =0; i < retas.length; i++){
+         getReducedEquationLineAnCheckCollision(
+              { 
+                X: retas[i].X,
+                Y: retas[i].Y
+              },
+              { 
+                X: retas[i].X2,
+                Y: retas[i].Y2
+              }
+         );
+    }
 
-//    colore( segRetaAmarela.cor )
-//    texto("Comprimento de AB: "+segRetaAmarela.getTamanho(), -(width/2) + 10, -(height/2-30) );
-//    colore( segRetaVermelha.cor ) 
-//    texto("Comprimento CD: "+segRetaVermelha.getTamanho(), -(width/2) + 10, -(height/2-10) );
-  
-/*
-   if(intersectionPoint != null){
-      fill(255);
-      stroke(0);
-      circle(intersectionPoint.X, intersectionPoint.Y, 20);
-      texto("Nova Intersecção no ponto:  X:"
-         +intersectionPoint.X.toFixed(2)
-         +" Y: "+intersectionPoint.Y.toFixed(2), -(width/2) + 10, -(height/2-50)         );
-   }
-   */
-  
-   for( let i =0; i < retas.length; i++){
-     getReducedEquationLineAnCheckCollision(
-          { 
-            X: retas[i].X,
-            Y: retas[i].Y
-          },
-          { 
-            X: retas[i].X2,
-            Y: retas[i].Y2
-          }
-     );
-   }
-    
 }
 
 
@@ -123,22 +104,18 @@ function gerarRetas(){
     let y2 = Math.floor( Math.random() * (height/2-10) )  +10;
     retas [0] = new SegReta(x1+30, y1, x2, y2, color(255, 0, 0));
       
-  
     // terceiro quadrante
     let x3 = (-1) * (Math.floor( Math.random() * (width/2-20) ) + 10); 
     let y3 = (-1) * (Math.floor( Math.random() * (height/2-10) ) + 10);
     retas [1] = new SegReta( x2+25, y2+50, x3, y3, color(0, 255, 0));
-  
   
   // quarto quadrante
     let x4 = Math.floor( Math.random() * (width/2-20) ); 
     let y4 = (-1) * (Math.floor( Math.random() * (height/2-10) ) + 10);
     retas [2] = new SegReta( x3-25, y3+15, x4, y4, color(0, 0, 255));
   
-    
   // primeiro quadrante
     retas [3] = new SegReta( x4-20, y4-25, x1-20, y1+60, color(0, 255, 255));
-  
   
     intersectionPoints[0] = calculateIntersection( retas[0], retas[1] ); 
     intersectionPoints[1] = calculateIntersection( retas[1], retas[2] ); 
@@ -150,15 +127,11 @@ function gerarRetas(){
 
 function drawRetas(){
   
-  for( let i =0; i < retas.length; i++){
-      color(retas[i].cor);
-      retas[i].drawSegmento();
-  }
+      for( let i =0; i < retas.length; i++){
+          color(retas[i].cor);
+          retas[i].drawSegmento();
+      }
 }
-
-
-
-
 
 
 
@@ -189,7 +162,6 @@ function calculateIntersection( line1, line2) {
   	
   	intersectDot = { X: px, Y: py };
       
-  	
 // VERIFICANDO ABAIXO SE O PONTO "D", "B" E O PONTO DE INTERSECÇÃO ESTAO NO 2 E 3 QUADRANTE OU NO 1 E 4 QUADRANTE, CASO SIM, ENTAO HAVERA A INTERSECÇÃO ENTRE OS SEGMENTOS DE RETA, CASO NÃO, ENTÃO O PONTO DE CRUZAMENTO NÃO É DESENHADO !!
     if(
         (  intersectDot.X > 0 && 
