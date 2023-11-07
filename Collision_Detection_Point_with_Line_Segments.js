@@ -81,7 +81,6 @@ function draw(){
               }
          );
     }
-
 }
 
 
@@ -96,8 +95,8 @@ function keyReleased(){
 function gerarRetas(){
 
     // primeiro quadrante
-    let x1 = Math.floor( Math.random() * (width/2-20) )  +10; 
-    let y1 = Math.floor( Math.random() * (height/2-10) )  +10;
+    let x1 = Math.floor( Math.random() * (width/2-20) ) + 10; 
+    let y1 = Math.floor( Math.random() * (height/2-10) ) + 10;
   
     // segundo quadrante
     let x2 = (-1) * (Math.floor( Math.random() * (width/2-10) )  +10); 
