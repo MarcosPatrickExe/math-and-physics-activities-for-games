@@ -195,7 +195,6 @@ function getReducedEquationLineAnCheckCollision( lineA, lineB ){
     Y = (a * dot.X) + b;
    // console.log("dot Y: "+Math.floor(dot.Y)+"  ==  "+ Math.floor(Y) );
    
-  
     fill(255);
     stroke(0);
   
