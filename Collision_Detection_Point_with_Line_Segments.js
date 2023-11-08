@@ -1,18 +1,29 @@
-var mouseXC=0, mouseYC=0, retas = [], intersectionPoints = new Array(4), dot=null;
+var mouseXC=0,
+    mouseYC=0, 
+    retas = [], 
+    intersectionPoints = new Array(4), 
+    dots = new Array(4), 
+    dot = null;
+
 const SPEED = 1;
 
+
+
 class Dot{
-    constructor(x, y, cor){ 
+  // get speed() { return SPEED; }
+  
+    constructor(x, y, cor){ // , directionX, directionY
        this.X = x;
        this.Y = y;
        this.cor = cor;
-       this.directX = -1;
-       this.directY = 1;
+       this.directX = ((Math.random() > 0.5) ?  -1 : 1);
+       this.directY = ((Math.random() > 0.5) ?  -1 : 1);
     }
   
     move(){
        this.X += SPEED * this.directX;
        this.Y += SPEED * this.directY;
+ //      console.log("dot X: "+this.X+"  // dot Y: "+this.Y);
     }
   
     drawDot(){
@@ -20,6 +31,8 @@ class Dot{
        circle(this.X, this.Y, 20);
     }
 } 
+
+
 
 
 class SegReta {
@@ -46,19 +59,21 @@ class SegReta {
 }
 
 
+
 function setup(){
-    createCanvas(770, 770);
+    createCanvas(windowHeight/1.01, windowHeight/1.01);
   
     let x1 = 0;
     let y1 = 0;
   
-    dot = new Dot(x1, y1, color(255, 255, 0));
+    dots[0] = new Dot(x1, y1, color(255, 255, 0));
   
     gerarRetas();
 }
 
 
 function draw(){
+ //   console.log("Valor aleatorio: "+ Math.floor(Math.random() *width/2)  * ((Math.random() > 0.5) ? -1 : 1));
     grabMouse();
     goCartesian();
     drawArrow();
@@ -69,25 +84,47 @@ function draw(){
   
     drawRetas()
 
-    for( let i =0; i < retas.length; i++){
-         getReducedEquationLineAnCheckCollision(
-              { 
-                X: retas[i].X,
-                Y: retas[i].Y
-              },
-              { 
-                X: retas[i].X2,
-                Y: retas[i].Y2
-              }
-         );
-    }
+ //   segRetaAmarela.drawSegmento();
+//    segRetaVermelha.drawSegmento();
+
+//    colore( segRetaAmarela.cor )
+//    texto("Comprimento de AB: "+segRetaAmarela.getTamanho(), -(width/2) + 10, -(height/2-30) );
+//    colore( segRetaVermelha.cor ) 
+//    texto("Comprimento CD: "+segRetaVermelha.getTamanho(), -(width/2) + 10, -(height/2-10) );
+  
+/*
+   if(intersectionPoint != null){
+      fill(255);
+      stroke(0);
+      circle(intersectionPoint.X, intersectionPoint.Y, 20);
+      texto("Nova Intersecção no ponto:  X:"
+         +intersectionPoint.X.toFixed(2)
+         +" Y: "+intersectionPoint.Y.toFixed(2), -(width/2) + 10, -(height/2-50)         );
+   }
+   */
+  
+   for( let i =0; i < retas.length; i++){
+     getReducedEquationLineAnCheckCollision( // passando objeto anonimo
+          { 
+            X: retas[i].X,
+            Y: retas[i].Y
+          },
+          { 
+            X: retas[i].X2,
+            Y: retas[i].Y2
+          }
+     );
+   }
+    
 }
 
 
 
 function keyReleased(){
-    if(key == 'a')
+    if(key == 'a'){
         gerarRetas();
+    }
+       
 }
 
 
@@ -95,26 +132,30 @@ function keyReleased(){
 function gerarRetas(){
 
     // primeiro quadrante
-    let x1 = Math.floor( Math.random() * (width/2-20) ) + 10; 
-    let y1 = Math.floor( Math.random() * (height/2-10) ) + 10;
+    let x1 = Math.floor( Math.random() * (width/2-20) )  +10; 
+    let y1 = Math.floor( Math.random() * (height/2-10) )  +10;
   
     // segundo quadrante
     let x2 = (-1) * (Math.floor( Math.random() * (width/2-10) )  +10); 
     let y2 = Math.floor( Math.random() * (height/2-10) )  +10;
     retas [0] = new SegReta(x1+30, y1, x2, y2, color(255, 0, 0));
       
+  
     // terceiro quadrante
     let x3 = (-1) * (Math.floor( Math.random() * (width/2-20) ) + 10); 
     let y3 = (-1) * (Math.floor( Math.random() * (height/2-10) ) + 10);
     retas [1] = new SegReta( x2+25, y2+50, x3, y3, color(0, 255, 0));
+  
   
   // quarto quadrante
     let x4 = Math.floor( Math.random() * (width/2-20) ); 
     let y4 = (-1) * (Math.floor( Math.random() * (height/2-10) ) + 10);
     retas [2] = new SegReta( x3-25, y3+15, x4, y4, color(0, 0, 255));
   
+    
   // primeiro quadrante
     retas [3] = new SegReta( x4-20, y4-25, x1-20, y1+60, color(0, 255, 255));
+  
   
     intersectionPoints[0] = calculateIntersection( retas[0], retas[1] ); 
     intersectionPoints[1] = calculateIntersection( retas[1], retas[2] ); 
@@ -126,11 +167,15 @@ function gerarRetas(){
 
 function drawRetas(){
   
-      for( let i =0; i < retas.length; i++){
-          color(retas[i].cor);
-          retas[i].drawSegmento();
-      }
+  for( let i =0; i < retas.length; i++){
+      color(retas[i].cor);
+      retas[i].drawSegmento();
+  }
 }
+
+
+
+
 
 
 
@@ -161,6 +206,7 @@ function calculateIntersection( line1, line2) {
   	
   	intersectDot = { X: px, Y: py };
       
+  	
 // VERIFICANDO ABAIXO SE O PONTO "D", "B" E O PONTO DE INTERSECÇÃO ESTAO NO 2 E 3 QUADRANTE OU NO 1 E 4 QUADRANTE, CASO SIM, ENTAO HAVERA A INTERSECÇÃO ENTRE OS SEGMENTOS DE RETA, CASO NÃO, ENTÃO O PONTO DE CRUZAMENTO NÃO É DESENHADO !!
     if(
         (  intersectDot.X > 0 && 
@@ -172,9 +218,11 @@ function calculateIntersection( line1, line2) {
            line2.X2 < 0 )
       ) 
        return intersectDot;
+     //  console.log("ponto de intersecção:  X: "+intersectDot.X +"  Y: "+ intersectDot.Y);
     else 
        intersectDot = null;
 }
+
 
 
 function getReducedEquationLineAnCheckCollision( lineA, lineB ){
@@ -194,15 +242,29 @@ function getReducedEquationLineAnCheckCollision( lineA, lineB ){
     Y = (a * dot.X) + b;
    // console.log("dot Y: "+Math.floor(dot.Y)+"  ==  "+ Math.floor(Y) );
    
+  
     fill(255);
     stroke(0);
   
-    if( Math.floor(dot.Y) ==  Math.floor(Y) ){
-          texto("Bolinha cruzou a reta!  ", -(width/2) + 10, -(height/2-50 ) ); 
-          dot.directX *= -1;
-          dot.directY *= -1;
-    }
+    for(int i=0; i<dots.length; i++){
+        if( Math.floor(dot.Y) == Math.floor(Y) ||
+            Math.floor(dot.Y) == (Math.floor(Y)+1) ||
+            Math.floor(dot.Y) == (Math.floor(Y)+2) ||
+            Math.floor(dot.Y) == (Math.floor(Y)+3) ||
+            Math.floor(dot.Y) == (Math.floor(Y)-1) ||
+            Math.floor(dot.Y) ==  (Math.floor(Y)-2) ||
+            Math.floor(dot.Y) ==  (Math.floor(Y)-3) 
+          ){
+              texto("Bolinha cruzou a reta!  ", -(width/2) + 10, -(height/2-50 )); 
+              dot.directX *= -1;
+              dot.directY *= -1;
+        }
+   }
 }
+    
+    
+
+
 
 //===========================  FUNCOES PADROES JA IMPLEMENTADAS NO KIT BASICO  ========================================
 function goCartesian(){
@@ -272,6 +334,7 @@ function drawArrow(){
   for( ang=0; ang<2*PI; ang += PI/26)
       line(0,0, R*cos(ang), R*sin(ang))
 }
+
     
 //  MACETE PARA DESCOBRIR A EQUACAO GERAL DA RETA QUE PASSA POR 2 PONTOS SEM USAR O DETERMINANTE:
 // https://www.youtube.com/watch?v=9dhtGUPgekw&t=362s&ab_channel=EquacionaComPauloPereira
