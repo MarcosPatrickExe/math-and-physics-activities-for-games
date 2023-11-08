@@ -172,7 +172,6 @@ function calculateIntersection( line1, line2) {
            line2.X2 < 0 )
       ) 
        return intersectDot;
-     //  console.log("ponto de intersecção:  X: "+intersectDot.X +"  Y: "+ intersectDot.Y);
     else 
        intersectDot = null;
 }
