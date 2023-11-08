@@ -2,7 +2,7 @@ var mouseXC=0,
     mouseYC=0, 
     retas = [], 
     intersectionPoints = new Array(4), 
-    dots = new Array(4), 
+    dots = new Array(2), 
     dot = null;
 
 const SPEED = 1;
@@ -13,8 +13,8 @@ class Dot{
   // get speed() { return SPEED; }
   
     constructor(x, y, cor){ // , directionX, directionY
-       this.X = x;
-       this.Y = y;
+       this.X = ((Math.random() > 0.5) ?  -1 : 1);
+       this.Y = ((Math.random() > 0.5) ?  -1 : 1);
        this.cor = cor;
        this.directX = ((Math.random() > 0.5) ?  -1 : 1);
        this.directY = ((Math.random() > 0.5) ?  -1 : 1);
@@ -63,10 +63,9 @@ class SegReta {
 function setup(){
     createCanvas(windowHeight/1.01, windowHeight/1.01);
   
-    let x1 = 0;
-    let y1 = 0;
-  
-    dots[0] = new Dot(x1, y1, color(255, 255, 0));
+    for( let i=0; i < dots.length; i++ ){
+        dots[i] = new Dot(0, 0, color(255, 255, 0));
+    }
   
     gerarRetas();
 }
@@ -79,8 +78,8 @@ function draw(){
     drawArrow();
     
   
-    dot.move();
-    dot.drawDot();
+ //   dot.move();
+ //   dot.drawDot();
   
     drawRetas()
 
@@ -238,26 +237,32 @@ function getReducedEquationLineAnCheckCollision( lineA, lineB ){
     /* Com os valores de "a" e "b" obtidos, eh possivel verificar se a bolinha cruza a reta!
        para isso, basta substituir o X da bolina na equacao reduzida da reta e verificar se o Y obtido eh igual ao        Y da bolinha...
       se forem iguais, entao a bolinha cruzou a reta!  */
+  
+  
+  
+   for( let i=0; i < dots.length; i++ ){
+         dots[i].move();
+         dots[i].drawDot();
+     
+         Y = (a * dots[i].X) + b; // obtendo o Y da reta a partir do X do ponto
+         X = (dots[i].Y - b) / a; // obtendo o X da reta a partir do Y do ponto
+       
+      // console.log("dot Y: "+Math.floor(dot.Y)+"  ==  "+ Math.floor(Y) );
+      
     
-    Y = (a * dot.X) + b;
-   // console.log("dot Y: "+Math.floor(dot.Y)+"  ==  "+ Math.floor(Y) );
-   
-  
-    fill(255);
-    stroke(0);
-  
-    for(int i=0; i<dots.length; i++){
-        if( Math.floor(dot.Y) == Math.floor(Y) ||
-            Math.floor(dot.Y) == (Math.floor(Y)+1) ||
-            Math.floor(dot.Y) == (Math.floor(Y)+2) ||
-            Math.floor(dot.Y) == (Math.floor(Y)+3) ||
-            Math.floor(dot.Y) == (Math.floor(Y)-1) ||
-            Math.floor(dot.Y) ==  (Math.floor(Y)-2) ||
-            Math.floor(dot.Y) ==  (Math.floor(Y)-3) 
+        if( Math.floor( dots[i].Y) == Math.floor(Y) ||
+            Math.floor( dots[i].X) == Math.floor(X)
+     /*     Math.floor( dots[i].Y) == (Math.floor(Y)+1) ||
+            Math.floor( dots[i].Y) == (Math.floor(Y)+2) ||
+            Math.floor( dots[i].Y) == (Math.floor(Y)+3) ||
+            Math.floor( dots[i].Y) == (Math.floor(Y)-1) ||
+            Math.floor( dots[i].Y) ==  (Math.floor(Y)-2) ||
+            Math.floor( dots[i].Y) ==  (Math.floor(Y)-3)
+           */
           ){
               texto("Bolinha cruzou a reta!  ", -(width/2) + 10, -(height/2-50 )); 
-              dot.directX *= -1;
-              dot.directY *= -1;
+               dots[i].directX *= -1;
+               dots[i].directY *= -1;
         }
    }
 }
