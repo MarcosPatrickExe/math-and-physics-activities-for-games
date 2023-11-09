@@ -83,24 +83,6 @@ function draw(){
   
     drawRetas()
 
- //   segRetaAmarela.drawSegmento();
-//    segRetaVermelha.drawSegmento();
-
-//    colore( segRetaAmarela.cor )
-//    texto("Comprimento de AB: "+segRetaAmarela.getTamanho(), -(width/2) + 10, -(height/2-30) );
-//    colore( segRetaVermelha.cor ) 
-//    texto("Comprimento CD: "+segRetaVermelha.getTamanho(), -(width/2) + 10, -(height/2-10) );
-  
-/*
-   if(intersectionPoint != null){
-      fill(255);
-      stroke(0);
-      circle(intersectionPoint.X, intersectionPoint.Y, 20);
-      texto("Nova Intersecção no ponto:  X:"
-         +intersectionPoint.X.toFixed(2)
-         +" Y: "+intersectionPoint.Y.toFixed(2), -(width/2) + 10, -(height/2-50)         );
-   }
-   */
   
    for( let i =0; i < retas.length; i++){
      getReducedEquationLineAnCheckCollision( // passando objeto anonimo
