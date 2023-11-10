@@ -22,7 +22,6 @@ class Dot{
     move(){
        this.X += SPEED * this.directX;
        this.Y += SPEED * this.directY;
- //      console.log("dot X: "+this.X+"  // dot Y: "+this.Y);
     }
   
     drawDot(){
