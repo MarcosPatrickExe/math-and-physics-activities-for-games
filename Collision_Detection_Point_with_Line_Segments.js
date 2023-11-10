@@ -10,9 +10,8 @@ const SPEED = 1;
 
 
 class Dot{
-  // get speed() { return SPEED; }
   
-    constructor(x, y, cor){ // , directionX, directionY
+    constructor(x, y, cor){ 
        this.X = ((Math.random() > 0.5) ?  -1 : 1);
        this.Y = ((Math.random() > 0.5) ?  -1 : 1);
        this.cor = cor;
