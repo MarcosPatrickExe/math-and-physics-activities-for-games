@@ -71,7 +71,6 @@ function setup(){
 
 
 function draw(){
- //   console.log("Valor aleatorio: "+ Math.floor(Math.random() *width/2)  * ((Math.random() > 0.5) ? -1 : 1));
     grabMouse();
     goCartesian();
     drawArrow();
