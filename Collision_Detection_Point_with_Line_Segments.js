@@ -51,7 +51,8 @@ class SegReta {
     getTamanho(){
         var dx = this.X2 - this.X ;
         var dy = this.Y2 - this.Y;
-        var lengthVec = Math.sqrt( Math.pow(dx, 2) + Math.pow(dy,2) ) // comprimento do vetor
+        var lengthVec = Math.sqrt( Math.pow(dx, 2) + Math.pow(dy,2) ) 
+        // comprimento do vetor
         return lengthVec.toFixed(2);
     }
 }
