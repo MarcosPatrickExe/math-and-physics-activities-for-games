@@ -83,7 +83,8 @@ function draw(){
 
   
    for( let i =0; i < retas.length; i++){
-     getReducedEquationLineAnCheckCollision( // passando objeto anonimo
+     getReducedEquationLineAnCheckCollision( 
+         // passando objeto anonimo
           { 
             X: retas[i].X,
             Y: retas[i].Y
