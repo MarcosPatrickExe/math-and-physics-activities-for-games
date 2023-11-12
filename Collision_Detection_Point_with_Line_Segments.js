@@ -74,8 +74,6 @@ function draw(){
     grabMouse();
     goCartesian();
     drawArrow();
-    
-  
  //   dot.move();
  //   dot.drawDot();
   
