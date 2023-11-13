@@ -78,7 +78,6 @@ function draw(){
  //   dot.drawDot();
   
     drawRetas()
-
   
    for( let i =0; i < retas.length; i++){
      getReducedEquationLineAnCheckCollision( 
