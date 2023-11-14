@@ -78,7 +78,8 @@ function lancamentoHorizontal(){
 
 function lancamentoObliquo(){
   
-   /* definicoes: 
+   /* Anotacoes a parte
+   definicoes: 
 Sabendo da velocidade de lancamento na diagonal, 
 representada pelo vetor 'Vo', e fazendo relacoes com os vetores Vox e Voy, 
 temos:
