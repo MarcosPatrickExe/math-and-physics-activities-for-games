@@ -13,7 +13,6 @@ function setup() {
   createCanvas(700, 780);
 }
 
-
 function draw() {
   background(0);
   
@@ -21,8 +20,6 @@ function draw() {
     lancamentoVertical();
   // lancamentoObliquo();
 }
-
-
 
 function lancamentoVertical(){
   
