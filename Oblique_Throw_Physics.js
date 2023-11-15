@@ -72,9 +72,7 @@ function lancamentoHorizontal(){
 }
 
 
-
 function lancamentoObliquo(){
-  
    /* Anotacoes a parte
    definicoes: 
 Sabendo da velocidade de lancamento na diagonal, 
