@@ -1,23 +1,23 @@
-var mouseXC=0,
-    mouseYC=0, 
-    retas = [], 
-    intersectionPoints = new Array(4), 
+var mouseXC = 0,
+    mouseYC = 0, 
+    retas = new Array(4), 
     dots = new Array(1), 
-    dot = null;
+    dot = null,
+    alreadyCollided = false;
 
 const SPEED = 1;
 
 
 
 class Dot{
-  // get speed() { return SPEED; }
   
-    constructor(x, y, cor){ // , directionX, directionY
+    constructor(x, y, cor, rad){ 
        this.X = ((Math.random() > 0.5) ?  -1 : 1);
        this.Y = ((Math.random() > 0.5) ?  -1 : 1);
        this.cor = cor;
        this.directX = ((Math.random() > 0.5) ?  -1 : 1);
        this.directY = ((Math.random() > 0.5) ?  -1 : 1);
+       this.radius = rad;
     }
   
     move(){
@@ -26,9 +26,17 @@ class Dot{
  //      console.log("dot X: "+this.X+"  // dot Y: "+this.Y);
     }
   
+    dash( direction ){
+       if("X")
+          this.X += (SPEED+8) * this.directX;
+       else
+          this.Y += (SPEED+8) * this.directY;
+    }
+  
+  
     drawDot(){
        fill(255);
-       circle(this.X, this.Y, 10);
+       circle(this.X, this.Y, this.radius);
     }
 } 
 
@@ -63,11 +71,10 @@ class SegReta {
 
 function setup(){
     createCanvas(windowHeight/1.01, windowHeight/1.01);
-  
-    frameRate(60);
-  
+
+
     for( let i=0; i < dots.length; i++ ){
-        dots[i] = new Dot(0, 0, color(255, 255, 0));
+        dots[i] = new Dot(0, 0, color(255, 255, 0), 20);
     }
   
     gerarRetas();
@@ -76,75 +83,51 @@ function setup(){
 
 
 function draw(){
- //   console.log("Valor aleatorio: "+ Math.floor(Math.random() *width/2)  * ((Math.random() > 0.5) ? -1 : 1));
     grabMouse();
     goCartesian();
     drawArrow();
-    
+    drawRetas();
   
- //   dot.move();
- //   dot.drawDot();
+    frameRate(60);
   
-    drawRetas()
-
- //   segRetaAmarela.drawSegmento();
-//    segRetaVermelha.drawSegmento();
-
-//    colore( segRetaAmarela.cor )
-//    texto("Comprimento de AB: "+segRetaAmarela.getTamanho(), -(width/2) + 10, -(height/2-30) );
-//    colore( segRetaVermelha.cor ) 
-//    texto("Comprimento CD: "+segRetaVermelha.getTamanho(), -(width/2) + 10, -(height/2-10) );
-  
-/*
-   if(intersectionPoint != null){
-      fill(255);
-      stroke(0);
-      circle(intersectionPoint.X, intersectionPoint.Y, 20);
-      texto("Nova Intersecção no ponto:  X:"
-         +intersectionPoint.X.toFixed(2)
-         +" Y: "+intersectionPoint.Y.toFixed(2), -(width/2) + 10, -(height/2-50)         );
-   }
-   */
-  
-  
-   for( let i =0; i < retas.length; i++){
-     getReducedEquationLineAnCheckCollision( // passando objeto anonimo
-          { 
-            X: retas[i].X,
-            Y: retas[i].Y
-          },
-          { 
-            X: retas[i].X2,
-            Y: retas[i].Y2
-          },
-          retas[i].corr
-     );
-   }
-    
+    for( let i =0; i < retas.length; i++){
+       checkCollide( // passando objeto anonimo
+            {
+              X: retas[i].X,
+              Y: retas[i].Y
+            },
+            {
+              X: retas[i].X2,
+              Y: retas[i].Y2
+            },
+            retas[i].corr
+      );
+    }
 }
 
 
 
 function keyReleased(){
-    if(key == 'a'){
+    if( key == 'a'){
         gerarRetas();
       
         for( let i=0; i < dots.length; i++ )
-          dots[i] = new Dot(0, 0, color(255, 255, 0));
+            dots[i] = new Dot(0, 0, color(255, 255, 0), 20);
     }
-       
+
 }
+
 
 
 
 function gerarRetas(){
 
     // primeiro quadrante
-    let x1 = Math.floor( Math.random() * (width/2-20) )  +10; 
+    let x1 = Math.floor( Math.random() * (width/2-20) )  +80; 
     let y1 = Math.floor( Math.random() * (height/2-10) )  +10;
 
     // segundo quadrante
-    let x2 = (-1) * (Math.floor( Math.random() * (width/2-10) )  +10); 
+    let x2 = (-1) * Math.floor( Math.random() * (width/2-50) ) -40; 
     let y2 = Math.floor( Math.random() * (height/2-10) )  +10;
     retas[0] = new SegReta(x1+30, y1, x2, y2, color(255, 0, 0), "Red");  // VERMELHO
 
@@ -163,13 +146,6 @@ function gerarRetas(){
 
   // primeiro quadrante
     retas[3] = new SegReta( x4-20, y4-25, x1-20, y1+60, color(0, 255, 255), "SkyBlue");
-  
-/*  
-    intersectionPoints[0] = calculateIntersection( retas[0], retas[1] ); 
-    intersectionPoints[1] = calculateIntersection( retas[1], retas[2] ); 
-    intersectionPoints[2] = calculateIntersection( retas[2], retas[3] ); 
-    intersectionPoints[3] = calculateIntersection( retas[3], retas[0] ); 
-*/
 }
 
 
@@ -186,77 +162,95 @@ function drawRetas(){
 
 
 
-
-
-
-function getReducedEquationLineAnCheckCollision( lineA, lineB, cor ){
-    // obtendo o coeficiente angular "a" atraves do deltaY (Y2 - Y) / deltaX (X2 - X):
+function getTriangleArea( circleOrigin, pointLineA, pointLineB ){
   
+    let OA = {
+                 X: pointLineA.X - circleOrigin.X, 
+                 Y: pointLineA.Y - circleOrigin.Y  
+             };
+  
+    let OB = {
+                 X: pointLineB.X - circleOrigin.X, 
+                 Y: pointLineB.Y - circleOrigin.Y  
+             };
+  
+    let cross_product = (OA.X * OB.Y) - (OA.Y * OB.X);
+  
+    if (cross_product < 0) // O VALOR DO PRODUTO VETORIAL AQUI NAO PODE SER NEGATIVO! ENTAO O SINAL É INVERTIDO CASO SEJA
+       cross_product *= (-1); 
+  
+    return cross_product/2; // retornando o valor da area do triangulo formado entre o centro do circulo O, pointLineA e pointLineB, ou O, A, B
+}
+
+
+
+
+function getMinimumDistanceCircleLine( O, A, B ){
     
-    let Y, x;
-    const a = Math.floor( (lineB.Y - lineA.Y) / (lineB.X - lineA.X) );
-    
-    // Y = a * x + b
-    // b = Y - a * x
-    const b = Math.floor( lineA.Y - (a * lineA.X) );
+    // height = 2 x AreaTriangulo / base
+    let base = Math.sqrt(  Math.pow( (B.X - A.X), 2)  +  Math.pow( (B.Y - A.Y), 2)   );
   
+    let minimunDistance = (2 * getTriangleArea( O, A, B )) / base;
   
-    console.log("a: "+a+" b: "+b);
-    
-    /* Com os valores de "a" e "b" obtidos, eh possivel verificar se a bolinha cruza a reta!
-       para isso, basta substituir o X da bolina na equacao reduzida da reta e verificar se o Y obtido eh igual ao        Y da bolinha...
-      se forem iguais, entao a bolinha cruzou a reta!  */
+    if (minimunDistance < 0)
+        minimunDistance *= (-1); // O VALOR DO PRODUTO VETORIAL AQUI NAO PODE SER NEGATIVO! ENTAO O SINAL É INVERTIDO CASO SEJA
+  
+    return minimunDistance;
+}
 
-  
+
+
+
+function checkCollide( lineA, lineB, lineCor){
+   
   
    for( let i=0; i < dots.length; i++){
-         dots[i].move();
-         dots[i].drawDot();
-     
-         Y = (a * dots[i].X) + b; // obtendo o Y da reta a partir do X do ponto
-         X = (dots[i].Y - b) / a; // obtendo o X da reta a partir do Y do ponto
-       
-    /*    Y = (width/2) - Y;
-       // Y *= -1;
-         Y = (height/2) - Y;
-         X = X - (width/2);
-     */
         
+         dots[i].drawDot();
+         let distance = getMinimumDistanceCircleLine( dots[i], lineA, lineB );
      
-        console.log("dot Y: "+Math.floor(dots[i].Y)+"  ==  Y: "+Math.floor(Y) );
-    
-        if(  Math.floor(dots[i].Y) == Math.floor(Y) ||
-             Math.floor(dots[i].X) == Math.floor(X)
-     /*     Math.floor( dots[i].Y) == (Math.floor(Y)+1) ||
-            Math.floor( dots[i].Y) == (Math.floor(Y)+2) ||
-            Math.floor( dots[i].Y) == (Math.floor(Y)+3) ||
-            Math.floor( dots[i].Y) == (Math.floor(Y)-1) ||
-            Math.floor( dots[i].Y) ==  (Math.floor(Y)-2) ||
-            Math.floor( dots[i].Y) ==  (Math.floor(Y)-3)
-           */
-         ){
-              if( cor == "Red" ){
-                  dots[i].directY *= -1;
-                
-              }else if( cor == "Green" ){
-                   dots[i].directX *= -1
-                
-              }else if( cor== "Blue" ){
-                   dots[i].directY *= -1
-                
-              }else if( cor=="SkyBlue" ){
-                   dots[i].directX *= -1
-              }
-          
-              dots[i].directX *= -1 
-              dots[i].directY *= -1
-      
-              texto("Bolinha cruzou a reta!  ", -(width/2) + 10, -(height/2-50 )); 
-        }
+     
+// SE A DISTANCIA ENTRE O CENTRO DO CIRCULO ATE O PONTO DA RETA MAIS PROXIMO DELE FOR MENOR OU IGUAL AO RAIO DO CIRCULO, ENTAO HOUVE COLISAO!
+         if( (distance <= dots[i].radius)  ){
+           
+                if( lineCor == "Red" ){
+                    texto("vermelho  ", -(width/2) + 10, -(height/2-50 )); 
+            //        console.log("VERMELHO   dist: "+distance);
+                    dots[i].directY *= -1;
+                    dots[i].dash("Y");
+
+                  
+                }else if( lineCor == "Green" ){
+                    texto("verde ", -(width/2) + 10, -(height/2-50 )); 
+                //    console.log("VERDE   dist: "+distance);
+                    dots[i].directX *= -1;
+                    dots[i].dash("X");
+
+                  
+                }else if( lineCor == "Blue" ){
+                 //   console.log("AZUL  dist: "+distance);
+                    texto("azul  ", -(width/2) + 10, -(height/2-50 )); 
+                    dots[i].directY *= -1;
+                    dots[i].dash("Y");
+
+                  
+                }else if( lineCor == "SkyBlue" ){
+             //       console.log("AZUL CLARO   dist: "+distance);
+                    texto("azul claro  ", -(width/2) + 10, -(height/2-50 )); 
+                    dots[i].directX *= -1;
+                    dots[i].dash("X");
+                }
+         }
+     
+         dots[i].move();
+         texto("", -(width/2) + 10, -(height/2-50 )); 
+     
    }
 }
     
-    
+
+    // https://www.baeldung.com/cs/circle-line-segment-collision-detection 
+  
 
 
 
@@ -330,6 +324,11 @@ function drawArrow(){
 }
 
     
+    
+    
+    
+    
+    
 //  MACETE PARA DESCOBRIR A EQUACAO GERAL DA RETA QUE PASSA POR 2 PONTOS SEM USAR O DETERMINANTE:
 // https://www.youtube.com/watch?v=9dhtGUPgekw&t=362s&ab_channel=EquacionaComPauloPereira
     
@@ -340,7 +339,65 @@ function drawArrow(){
     
     
     
+/*  
+function getReducedEquationLineAnCheckCollision( lineA, lineB, cor ){
+    // obtendo o coeficiente angular "a" atraves do deltaY (Y2 - Y) / deltaX (X2 - X):
+  
     
+    let Y, x;
+    const a = Math.floor( (lineB.Y - lineA.Y) / (lineB.X - lineA.X) );
+    
+    // Y = a * x + b
+    // b = Y - a * x
+    const b = Math.floor( lineA.Y - (a * lineA.X) );
+  
+  
+    console.log("a: "+a+" b: "+b);
+    
+    /* Com os valores de "a" e "b" obtidos, eh possivel verificar se a bolinha cruza a reta! para isso, basta substituir o X da bolina na equacao reduzida da reta e verificar se o Y obtido eh igual ao        Y da bolinha... se forem iguais, entao a bolinha cruzou a reta!  */
+
+
+/*  
+   for( let i=0; i < dots.length; i++){
+         dots[i].move();
+         dots[i].drawDot();
+     
+         Y = (a * dots[i].X) + b; // obtendo o Y da reta a partir do X do ponto
+         X = (dots[i].Y - b) / a; // obtendo o X da reta a partir do Y do ponto
+       
+       //   Y = (width/2) - Y;
+       // Y *= -1;
+       //  Y = (height/2) - Y;
+       //  X = X - (width/2);
+     
+
+        console.log("dot Y: "+Math.floor(dots[i].Y)+"  ==  Y: "+Math.floor(Y) );
+    
+        if(  Math.floor(dots[i].Y) == Math.floor(Y) ||
+             Math.floor(dots[i].X) == Math.floor(X)
+         ){
+              if( cor == "Red" ){
+                  dots[i].directY *= -1;
+                
+              }else if( cor == "Green" ){
+                   dots[i].directX *= -1
+                
+              }else if( cor== "Blue" ){
+                   dots[i].directY *= -1
+                
+              }else if( cor=="SkyBlue" ){
+                   dots[i].directX *= -1
+              }
+          
+              dots[i].directX *= -1 
+              dots[i].directY *= -1
+      
+              texto("Bolinha cruzou a reta!  ", -(width/2) + 10, -(height/2-50 )); 
+        }
+   }
+}
+*/    
+
     
     
 /*
@@ -388,4 +445,32 @@ function calculateIntersection( line1, line2) {
     else 
        intersectDot = null;
 }
+
+
+
+function getReducedEquationLineAnCheckCollision( lineA, lineB, cor ){
+    // obtendo o coeficiente angular "a" atraves do deltaY (Y2 - Y) / deltaX (X2 - X):
+  
+    let Y, x;
+    const a = Math.floor( (lineB.Y - lineA.Y) / (lineB.X - lineA.X) );
+    
+    // Y = a * x + b
+    // b = Y - a * x
+    const b = Math.floor( lineA.Y - (a * lineA.X) );
+  
+    console.log("a: "+a+" b: "+b);
+    
+    /* Com os valores de "a" e "b" obtidos, eh possivel verificar se a bolinha cruza a reta!
+       para isso, basta substituir o X da bolina na equacao reduzida da reta e verificar se o Y obtido eh igual ao        Y da bolinha...
+      se forem iguais, entao a bolinha cruzou a reta!  */
+
+  /*
+   for( let i=0; i < dots.length; i++){
+         dots[i].move();
+         dots[i].drawDot();
+     
+         Y = (a * dots[i].X) + b; // obtendo o Y da reta a partir do X do ponto
+         X = (dots[i].Y - b) / a; // obtendo o X da reta a partir do Y do ponto
+       
+   }
 */
