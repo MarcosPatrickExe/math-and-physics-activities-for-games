@@ -3,9 +3,10 @@ var mouseXC = 0,
     retas = new Array(4), 
     dots = new Array(1), 
     dot = null,
-    alreadyCollided = false;
-
-const SPEED = 1;
+    alreadyCollided = false
+  
+const circleRadius = 30;
+const SPEED = 2;
 
 
 
@@ -26,11 +27,11 @@ class Dot{
  //      console.log("dot X: "+this.X+"  // dot Y: "+this.Y);
     }
   
-    dash( direction ){
-       if("X")
-          this.X += (SPEED+8) * this.directX;
-       else
-          this.Y += (SPEED+8) * this.directY;
+    dash( direction, dashDistance ){
+       if("xis")
+          this.X += (SPEED + dashDistance) * this.directX;
+       else if("yis")
+          this.Y += (SPEED + dashDistance) * this.directY;
     }
   
   
@@ -74,7 +75,7 @@ function setup(){
 
 
     for( let i=0; i < dots.length; i++ ){
-        dots[i] = new Dot(0, 0, color(255, 255, 0), 20);
+        dots[i] = new Dot(0, 0, color(255, 255, 0), circleRadius);
     }
   
     gerarRetas();
@@ -112,7 +113,7 @@ function keyReleased(){
         gerarRetas();
       
         for( let i=0; i < dots.length; i++ )
-            dots[i] = new Dot(0, 0, color(255, 255, 0), 20);
+            dots[i] = new Dot(0, 0, color(255, 255, 0), circleRadius);
     }
 
 }
@@ -124,16 +125,16 @@ function gerarRetas(){
 
     // primeiro quadrante
     let x1 = Math.floor( Math.random() * (width/2-20) )  +80; 
-    let y1 = Math.floor( Math.random() * (height/2-10) )  +10;
+    let y1 = Math.floor( Math.random() * (height/2-10) )  +40;
 
     // segundo quadrante
     let x2 = (-1) * Math.floor( Math.random() * (width/2-50) ) -40; 
-    let y2 = Math.floor( Math.random() * (height/2-10) )  +10;
+    let y2 = Math.floor( Math.random() * (height/2-10) )  +30;
     retas[0] = new SegReta(x1+30, y1, x2, y2, color(255, 0, 0), "Red");  // VERMELHO
 
 
     // terceiro quadrante
-    let x3 = (-1) * (Math.floor( Math.random() * (width/2-20) ) + 10); 
+    let x3 = (-1) * (Math.floor( Math.random() * (width/2-20) ) - 40); 
     let y3 = (-1) * (Math.floor( Math.random() * (height/2-10) ) + 10);
     retas[1] = new SegReta( x2+25, y2+50, x3, y3, color(0, 255, 0), "Green"); // VERDE
 
@@ -165,14 +166,14 @@ function drawRetas(){
 function getTriangleArea( circleOrigin, pointLineA, pointLineB ){
   
     let OA = {
-                 X: pointLineA.X - circleOrigin.X, 
-                 Y: pointLineA.Y - circleOrigin.Y  
-             };
+         X: pointLineA.X - circleOrigin.X, 
+         Y: pointLineA.Y - circleOrigin.Y  
+    };
   
     let OB = {
-                 X: pointLineB.X - circleOrigin.X, 
-                 Y: pointLineB.Y - circleOrigin.Y  
-             };
+         X: pointLineB.X - circleOrigin.X, 
+         Y: pointLineB.Y - circleOrigin.Y  
+    };
   
     let cross_product = (OA.X * OB.Y) - (OA.Y * OB.X);
   
@@ -192,7 +193,7 @@ function getMinimumDistanceCircleLine( O, A, B ){
   
     let minimunDistance = (2 * getTriangleArea( O, A, B )) / base;
   
-    if (minimunDistance < 0)
+    if ( minimunDistance < 0)
         minimunDistance *= (-1); // O VALOR DO PRODUTO VETORIAL AQUI NAO PODE SER NEGATIVO! ENTAO O SINAL É INVERTIDO CASO SEJA
   
     return minimunDistance;
@@ -211,40 +212,40 @@ function checkCollide( lineA, lineB, lineCor){
      
      
 // SE A DISTANCIA ENTRE O CENTRO DO CIRCULO ATE O PONTO DA RETA MAIS PROXIMO DELE FOR MENOR OU IGUAL AO RAIO DO CIRCULO, ENTAO HOUVE COLISAO!
-         if( (distance <= dots[i].radius)  ){
+         if( (distance+40) <= dots[i].radius  ){
            
                 if( lineCor == "Red" ){
                     texto("vermelho  ", -(width/2) + 10, -(height/2-50 )); 
             //        console.log("VERMELHO   dist: "+distance);
                     dots[i].directY *= -1;
-                    dots[i].dash("Y");
+                    dots[i].dash("yis", 0);
 
                   
                 }else if( lineCor == "Green" ){
                     texto("verde ", -(width/2) + 10, -(height/2-50 )); 
                 //    console.log("VERDE   dist: "+distance);
                     dots[i].directX *= -1;
-                    dots[i].dash("X");
+                    dots[i].dash("xis", 0);
 
                   
                 }else if( lineCor == "Blue" ){
                  //   console.log("AZUL  dist: "+distance);
                     texto("azul  ", -(width/2) + 10, -(height/2-50 )); 
                     dots[i].directY *= -1;
-                    dots[i].dash("Y");
+                    dots[i].dash("yis", 0);
 
                   
                 }else if( lineCor == "SkyBlue" ){
              //       console.log("AZUL CLARO   dist: "+distance);
                     texto("azul claro  ", -(width/2) + 10, -(height/2-50 )); 
                     dots[i].directX *= -1;
-                    dots[i].dash("X");
+                    dots[i].dash("xis", 0);
                 }
          }
      
          dots[i].move();
          texto("", -(width/2) + 10, -(height/2-50 )); 
-     
+         console.log( dots[i].directX +" "+ dots[i].directY);
    }
 }
     
