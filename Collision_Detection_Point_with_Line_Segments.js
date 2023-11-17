@@ -5,8 +5,8 @@ var mouseXC = 0,
     dot = null,
     alreadyCollided = false
   
-const circleRadius = 10;
-const SPEED = 1.5;
+const circleRadius = 5;
+const SPEED = 1;
 
 
 
@@ -29,9 +29,9 @@ class Dot{
   
     dash( direction, dashDistance ){
        if("xis"){
-          this.X += (SPEED + dashDistance) * this.directX;
+          this.X += (SPEED + circleRadius) * this.directX;
        }else if("yis"){
-          this.Y += (SPEED + dashDistance) * this.directY;
+          this.Y += (SPEED + circleRadius) * this.directY;
        }
     }
   
@@ -143,11 +143,11 @@ function gerarRetas(){
   // quarto quadrante
     let x4 = Math.floor( Math.random() * (width/2-20) ); 
     let y4 = (-1) * (Math.floor( Math.random() * (height/2-10) ) + 10);
-    retas[2] = new SegReta( x3-25, y3+15, x4, y4, color(0, 0, 255), "Blue");  // AZUL
+    retas[2] = new SegReta( x3-135, y3+15, x4+60, y4-60, color(0, 0, 255), "Blue");  // AZUL
 
 
   // primeiro quadrante
-    retas[3] = new SegReta( x4-20, y4-25, x1-20, y1+60, color(0, 255, 255), "SkyBlue");// AZUL CLARO
+    retas[3] = new SegReta( x4-20, y4-85, x1-20, y1+60, color(0, 255, 255), "SkyBlue");// AZUL CLARO
 }
 
 
@@ -213,35 +213,33 @@ function checkCollide( lineA, lineB, lineCor){
      
      
 // SE A DISTANCIA ENTRE O CENTRO DO CIRCULO ATE O PONTO DA RETA MAIS PROXIMO DELE FOR MENOR OU IGUAL AO RAIO DO CIRCULO, ENTAO HOUVE COLISAO!
-         if( (distance) <= dots[i].radius  ){
+         if( distance <= dots[i].radius+circleRadius ){
            
                 if( lineCor == "Red" ){
                     texto("vermelho  ", -(width/2) + 10, -(height/2-50 )); 
-            //        console.log("VERMELHO   dist: "+distance);
                     dots[i].directY *= -1;
-                    dots[i].dash("yis", distance+1);
+                    dots[i].dash("yis", circleRadius*2);
 
                   
                 }else if( lineCor == "Green" ){
                     texto("verde ", -(width/2) + 10, -(height/2-50 )); 
-                //    console.log("VERDE   dist: "+distance);
                     dots[i].directX *= -1;
-                    dots[i].dash("xis", distance+1);
+                    dots[i].dash("xis", circleRadius*2);
 
                   
                 }else if( lineCor == "Blue" ){
-                 //   console.log("AZUL  dist: "+distance);
                     texto("azul  ", -(width/2) + 10, -(height/2-50 )); 
                     dots[i].directY *= -1;
-                    dots[i].dash("yis", distance+1);
+                    dots[i].dash("yis", circleRadius*2);
 
                   
                 }else if( lineCor == "SkyBlue" ){
-             //       console.log("AZUL CLARO   dist: "+distance);
                     texto("azul claro  ", -(width/2) + 10, -(height/2-50 )); 
                     dots[i].directX *= -1;
-                    dots[i].dash("xis", distance+1);
+                    dots[i].dash("xis", circleRadius*2);
                 }
+           
+      
          }
      
          dots[i].move();
