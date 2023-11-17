@@ -5,8 +5,8 @@ var mouseXC = 0,
     dot = null,
     alreadyCollided = false
   
-const circleRadius = 30;
-const SPEED = 2;
+const circleRadius = 10;
+const SPEED = 1.5;
 
 
 
@@ -28,10 +28,11 @@ class Dot{
     }
   
     dash( direction, dashDistance ){
-       if("xis")
+       if("xis"){
           this.X += (SPEED + dashDistance) * this.directX;
-       else if("yis")
+       }else if("yis"){
           this.Y += (SPEED + dashDistance) * this.directY;
+       }
     }
   
   
@@ -130,13 +131,13 @@ function gerarRetas(){
     // segundo quadrante
     let x2 = (-1) * Math.floor( Math.random() * (width/2-50) ) -40; 
     let y2 = Math.floor( Math.random() * (height/2-10) )  +30;
-    retas[0] = new SegReta(x1+30, y1, x2, y2, color(255, 0, 0), "Red");  // VERMELHO
+    retas[0] = new SegReta(x1+30, y1, x2-100, y2, color(255, 0, 0), "Red");  // VERMELHO
 
 
     // terceiro quadrante
     let x3 = (-1) * (Math.floor( Math.random() * (width/2-20) ) - 40); 
     let y3 = (-1) * (Math.floor( Math.random() * (height/2-10) ) + 10);
-    retas[1] = new SegReta( x2+25, y2+50, x3, y3, color(0, 255, 0), "Green"); // VERDE
+    retas[1] = new SegReta( x2-60, y2+50, x3-90, y3-60, color(0, 255, 0), "Green"); // VERDE
 
 
   // quarto quadrante
@@ -146,7 +147,7 @@ function gerarRetas(){
 
 
   // primeiro quadrante
-    retas[3] = new SegReta( x4-20, y4-25, x1-20, y1+60, color(0, 255, 255), "SkyBlue");
+    retas[3] = new SegReta( x4-20, y4-25, x1-20, y1+60, color(0, 255, 255), "SkyBlue");// AZUL CLARO
 }
 
 
@@ -189,7 +190,7 @@ function getTriangleArea( circleOrigin, pointLineA, pointLineB ){
 function getMinimumDistanceCircleLine( O, A, B ){
     
     // height = 2 x AreaTriangulo / base
-    let base = Math.sqrt(  Math.pow( (B.X - A.X), 2)  +  Math.pow( (B.Y - A.Y), 2)   );
+    let base = Math.sqrt(  ( Math.pow( (B.X - A.X), 2)  +  Math.pow( (B.Y - A.Y), 2))  );
   
     let minimunDistance = (2 * getTriangleArea( O, A, B )) / base;
   
@@ -212,34 +213,34 @@ function checkCollide( lineA, lineB, lineCor){
      
      
 // SE A DISTANCIA ENTRE O CENTRO DO CIRCULO ATE O PONTO DA RETA MAIS PROXIMO DELE FOR MENOR OU IGUAL AO RAIO DO CIRCULO, ENTAO HOUVE COLISAO!
-         if( (distance+40) <= dots[i].radius  ){
+         if( (distance) <= dots[i].radius  ){
            
                 if( lineCor == "Red" ){
                     texto("vermelho  ", -(width/2) + 10, -(height/2-50 )); 
             //        console.log("VERMELHO   dist: "+distance);
                     dots[i].directY *= -1;
-                    dots[i].dash("yis", 0);
+                    dots[i].dash("yis", distance+1);
 
                   
                 }else if( lineCor == "Green" ){
                     texto("verde ", -(width/2) + 10, -(height/2-50 )); 
                 //    console.log("VERDE   dist: "+distance);
                     dots[i].directX *= -1;
-                    dots[i].dash("xis", 0);
+                    dots[i].dash("xis", distance+1);
 
                   
                 }else if( lineCor == "Blue" ){
                  //   console.log("AZUL  dist: "+distance);
                     texto("azul  ", -(width/2) + 10, -(height/2-50 )); 
                     dots[i].directY *= -1;
-                    dots[i].dash("yis", 0);
+                    dots[i].dash("yis", distance+1);
 
                   
                 }else if( lineCor == "SkyBlue" ){
              //       console.log("AZUL CLARO   dist: "+distance);
                     texto("azul claro  ", -(width/2) + 10, -(height/2-50 )); 
                     dots[i].directX *= -1;
-                    dots[i].dash("xis", 0);
+                    dots[i].dash("xis", distance+1);
                 }
          }
      
