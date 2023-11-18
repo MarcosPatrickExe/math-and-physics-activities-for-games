@@ -5,14 +5,14 @@ var mouseXC = 0,
     dot = null,
     alreadyCollided = false
   
-const circleRadius = 5;
+const circleRadius = 10;
 const SPEED = 1;
 
 
 
 class Dot{
   
-    constructor(x, y, cor, rad){ 
+    constructor(x, y, cor, rad){
        this.X = ((Math.random() > 0.5) ?  -1 : 1);
        this.Y = ((Math.random() > 0.5) ?  -1 : 1);
        this.cor = cor;
@@ -110,7 +110,7 @@ function draw(){
 
 
 function keyReleased(){
-    if( key == 'a'){
+    if( key == 'a' || key == 'A'){
         gerarRetas();
       
         for( let i=0; i < dots.length; i++ )
@@ -218,25 +218,25 @@ function checkCollide( lineA, lineB, lineCor){
                 if( lineCor == "Red" ){
                     texto("vermelho  ", -(width/2) + 10, -(height/2-50 )); 
                     dots[i].directY *= -1;
-                    dots[i].dash("yis", circleRadius*2);
+                    dots[i].dash("yis", circleRadius);
 
                   
                 }else if( lineCor == "Green" ){
                     texto("verde ", -(width/2) + 10, -(height/2-50 )); 
                     dots[i].directX *= -1;
-                    dots[i].dash("xis", circleRadius*2);
+                    dots[i].dash("xis", circleRadius);
 
                   
                 }else if( lineCor == "Blue" ){
                     texto("azul  ", -(width/2) + 10, -(height/2-50 )); 
                     dots[i].directY *= -1;
-                    dots[i].dash("yis", circleRadius*2);
+                    dots[i].dash("yis", circleRadius);
 
                   
                 }else if( lineCor == "SkyBlue" ){
                     texto("azul claro  ", -(width/2) + 10, -(height/2-50 )); 
                     dots[i].directX *= -1;
-                    dots[i].dash("xis", circleRadius*2);
+                    dots[i].dash("xis", circleRadius);
                 }
            
       
