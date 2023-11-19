@@ -9,7 +9,7 @@ const circleRadius = 10;
 const SPEED = 1;
 
 
-
+// classe que representa a "bolinha"
 class Dot{
   
     constructor(x, y, cor, rad){
