@@ -5,8 +5,8 @@ var mouseXC = 0,
     dot = null,
     alreadyCollided = false
   
-const circleRadius = 10;
-const SPEED = 1;
+const circleRadius = 5;
+const SPEED = 2;
 
 
 // classe que representa a "bolinha"
